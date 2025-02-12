@@ -8,5 +8,7 @@ public class Main {
         
         // Write your program here -- consider breaking the program into 
         // multiple classes.
+        Statistics stat = new Statistics();
+        new UserInterface(scanner, stat).start();
     }
 }
