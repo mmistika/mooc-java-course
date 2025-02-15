@@ -1,5 +1,5 @@
 
-public class Human {
+public class Human implements Comparable<Human> {
 
     private int wage;
     private String name;
@@ -21,5 +21,11 @@ public class Human {
     @Override
     public String toString() {
         return name + " " + wage;
+    }
+
+    @Override
+    public int compareTo(Human o) {
+        Human obj = (Human) o;
+        return obj.wage - this.wage;
     }
 }
