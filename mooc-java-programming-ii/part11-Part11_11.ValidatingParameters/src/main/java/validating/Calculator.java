@@ -2,7 +2,10 @@ package validating;
 
 public class Calculator {
 
-    public int factorial(int num) {
+    public int factorial(int num) throws IllegalArgumentException {
+        if (num < 0) {
+            throw new IllegalArgumentException();
+        }
 
         int answer = 1;
         for (int i = 1; i <= num; i++) {
@@ -12,8 +15,11 @@ public class Calculator {
         return answer;
     }
 
-    public int binomialCoefficent(int setSize, int subsetSize) {
-
+    public int binomialCoefficent(int setSize, int subsetSize) throws IllegalArgumentException {
+        if (setSize < 0 || setSize < subsetSize || subsetSize < 0) {
+            throw new IllegalArgumentException();
+        }
+        
         int numerator = factorial(setSize);
         int denominator = factorial(subsetSize) * factorial(setSize - subsetSize);
 
