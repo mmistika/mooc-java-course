@@ -6,7 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
@@ -41,18 +41,18 @@ public class CyclingStatisticsApplication extends Application {
         xAxis.setLabel("Year / Month");
         yAxis.setLabel("Cyclists");
 
-        
-        LineChart<String, Number> chart = new LineChart<>(xAxis, yAxis);
+        BarChart<String, Number> chart = new BarChart<>(xAxis, yAxis);
         chart.setLegendVisible(false);
 
         list.setOnMouseClicked((MouseEvent event) -> {
             String chosen = list.getSelectionModel().getSelectedItem();
             Map<String, Integer> values = statistics.monthlyCyclists(chosen);
             chart.getData().clear();
-            XYChart.Series chartData = new XYChart.Series();
 
-            values.keySet().stream().forEach(time -> {
-                chartData.getData().add(new XYChart.Data(time, values.get(time)));
+            XYChart.Series<String, Number> chartData = new XYChart.Series<>();
+
+            values.forEach((time, count) -> {
+                chartData.getData().add(new XYChart.Data<>(time, count));
             });
 
             chart.getData().add(chartData);
@@ -60,14 +60,13 @@ public class CyclingStatisticsApplication extends Application {
 
         gridPane.add(chart, 1, 0, 1, 2);
 
-        Scene view = new Scene(gridPane);
-
+        Scene view = new Scene(gridPane, 800, 600);
         stage.setScene(view);
+        stage.setTitle("Cycling Statistics");
         stage.show();
     }
 
     public static void main(String[] args) {
         launch(CyclingStatisticsApplication.class);
     }
-
 }
