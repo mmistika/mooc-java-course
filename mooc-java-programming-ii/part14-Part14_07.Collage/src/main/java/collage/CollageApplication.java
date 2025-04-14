@@ -29,25 +29,21 @@ public class CollageApplication extends Application {
         WritableImage targetImage = new WritableImage(width, height);
         PixelWriter imageWriter = targetImage.getPixelWriter();
 
-        int yCoordinate = 0;
-        while (yCoordinate < height) {
-            int xCoordinate = 0;
-            while (xCoordinate < width) {
-
-                Color color = imageReader.getColor(xCoordinate, yCoordinate);
-                double red = color.getRed();
-                double green = color.getGreen();
-                double blue = color.getBlue();
-                double opacity = color.getOpacity();
-
-                Color newColor = new Color(red, green, blue, opacity);
-
-                imageWriter.setColor(xCoordinate, yCoordinate, newColor);
-
-                xCoordinate++;
+        for (int x = 0; x < width; x += 2) {
+            for (int y = 0; y < height; y += 2) {
+                Color negative = getNegative(imageReader.getColor(x, y));
+                
+                int xHalf = x / 2;
+                int yHalf = y / 2;
+                
+                for (int dx = 0; dx < 2; ++dx) {
+                    for (int dy = 0; dy < 2; ++dy) {
+                        int xNew = xHalf + dx * (width / 2);
+                        int yNew = yHalf + dy * (height / 2);
+                        imageWriter.setColor(xNew, yNew, negative);
+                    }
+                }
             }
-
-            yCoordinate++;
         }
 
         ImageView image = new ImageView(targetImage);
@@ -57,6 +53,15 @@ public class CollageApplication extends Application {
 
         stage.setScene(new Scene(pane));
         stage.show();
+    }
+
+    private Color getNegative(Color color) {
+        double red = 1.0 - color.getRed();
+        double green = 1.0 - color.getGreen();
+        double blue = 1.0 - color.getBlue();
+        double opacity = color.getOpacity();
+        return new Color(red, green, blue, opacity);
+
     }
 
     public static void main(String[] args) {
